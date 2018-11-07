@@ -108,7 +108,7 @@ Or
 @RequestMapping("/api/v1/")
 public class TransactionController {
 ```
-### 3.1.2 Remove Controller.
+### 3.1.2 Hide Controller.
 @ApiIgnore this annotation will help to remove controller.
 ```java
 @ApiIgnore
@@ -131,7 +131,13 @@ public class TransactionController {
 public ResponseEntity<Result> getRequestRegistration(@ApiIgnore @Valid @RequestBody AppRegistration appRegistration,
 	@ApiIgnore Errors errors) {
 ```
-
+### 3.1.4 Hide Controller-method
+In @ApiOperation annotation-> hidden=true to hide method
+```java
+@ApiOperation(hidden = true, value = "customer logout.", notes = "logout from session.")
+@GetMapping("/401/{language}")
+public ResponseEntity<Result> authError(@PathVariable(name = "language") String lang) {
+```
 ### 3.2.1 Swagger in Model.
 @ApiModel will help to describe the model.
 ```java
