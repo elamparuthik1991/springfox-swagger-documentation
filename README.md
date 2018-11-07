@@ -2,7 +2,7 @@
 
 swagger will show all APIs details in spring project.
 
-## Installation
+## 1.Installation
 pom.xml we need to include following dependencies.
 
 ```xml
@@ -23,7 +23,7 @@ pom.xml we need to include following dependencies.
 </dependency>
 ```
 
-## Configuration
+## 2.Configuration
 We need to include the following "SpringFoxConfig.java" file.   
 
 ```java
@@ -89,6 +89,65 @@ public class SpringFoxConfig {
     }
 
 }
+```
+## 3 Brief- How to integrate.
+This part show how to write API Description and Hide/Show APIs.
+
+### 3.1.1 Swagger in Controller Implementation
+This @Api need to include in begining of the controller.
+```java
+@Api("Transaction related operations are handled here.")
+@RestController
+@RequestMapping("/api/v1/")
+public class TransactionController {
+```
+Or
+```java
+@Api(value = "/api/v1/", description = "Registration related operations are handled here.")
+@RestController
+@RequestMapping("/api/v1/")
+public class TransactionController {
+```
+### 3.1.2 Remove Controller.
+@ApiIgnore this annotation will help to remove controller.
+```java
+@ApiIgnore
+@Api(value = "/api/v1/", description = "Registration related operations are handled here.")
+@RestController
+@RequestMapping("/api/v1/")
+public class TransactionController {
+```
+### 3.1.3 Swagger in Controller-method Implementation
+1. @ApiImplicitParams annotation need to include in begining of the controller method. It will display custom request in swagger.
+2. @ApiOperation annotation need to include in begining of the controller method. It will have error code and demo response. eg.400.
+3. @ApiIgnore to remove model object like AppRegistration and to remove unwanted models.
+```java
+@ApiImplicitParams({
+	@ApiImplicitParam(paramType = "request", name = "request", value = "{\"noorAccountNumber\": \"AS-2342-324-2342\", \"mobileNumber\": \"234234323\"}", required = true, dataType = "body") })
+@ApiResponses(value = {
+	@ApiResponse(code = 400, message = "error message-> status:error, message:error message here.", response = Result.class) })
+@ApiOperation("generate otp for mobile app.")
+@PostMapping("/requestRegistration")
+public ResponseEntity<Result> getRequestRegistration(@ApiIgnore @Valid @RequestBody AppRegistration appRegistration,
+	@ApiIgnore Errors errors) {
+```
+
+### 3.2.1 Swagger in Model.
+@ApiModel will help to describe the model.
+```java
+@Entity
+@Table(name = "app_registration")
+@ApiModel(description = "Class representing a AppRegistration tracked by the application..")
+```
+### 3.2.2 Swagger in Model.
+@ApiModelProperty will help to describe the model parameter.
+1. example- will be the example value.
+2. request- will intimate * in swagger.
+3. value- will be field value.
+```java
+@ApiModelProperty(value="noorAccountNumber", notes = "noor account number should not be empty.", example = "SA-3242-234-2342", required = true, position = 0)
+@NotEmpty(message="noorAccountNumber.error.empty")//noor account number should not be empty.
+private String noorAccountNumber;
 ```
 
 ## Conclusion
